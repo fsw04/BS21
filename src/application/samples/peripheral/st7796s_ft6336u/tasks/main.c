@@ -9,71 +9,66 @@
 #include "soc_osal.h"
 #include "securec.h"
 #include "app_init.h"
-#include "ui_button.h"
+#include "ui_page_health.h"
+#include "font.h"
+#include "sle_1vn_server.h"
+#include "sensor_task.h"
+#include "measurement_session.h"
 
 #define UI_TASK_PRIO                    24
 #define UI_TASK_STACK_SIZE              0x2000
+#define SLE_TASK_PRIO                   26
+#define SLE_TASK_STACK_SIZE             0x4000
 
-/* 按钮点击回调 */
-static void btn_ok_click(void)
+static void on_identity_received(const char *name, const char *id_number)
 {
-    osal_printk("[UI] >>> OK Button Clicked!\r\n");
+    osal_printk("[main] identity: %s %s\r\n", name, id_number);
+    ui_health_set_identity(name, id_number);
 }
 
-static void btn_cancel_click(void)
+static void update_sle_status(void)
 {
-    osal_printk("[UI] >>> Cancel Button Clicked!\r\n");
+    bool connected = sle_1vn_server_is_connected();
+    ui_health_set_sle_status(connected, "watch-01", connected ? -45 : 0);
 }
 
 static void *ui_task(const char *arg)
 {
-    (void)(arg);  /* 消除 unused parameter 警告，替代 unused(arg) */
+    (void)arg;
 
-    errcode_t ret = ui_init();
+    errcode_t ret = ui_health_init();
     if (ret != ERRCODE_SUCC) {
-        osal_printk("[UI] init failed, task exit\r\n");
+        osal_printk("[main] UI init failed\r\n");
         return NULL;
     }
 
-    /* 定义按钮1：OK（绿色） */
-    static ui_button_t btn_ok = {
-        .x = 60,  .y = 180,
-        .width = 200, .height = 60,
-        .color = COL_GREEN,
-        .color_pressed = 0xAFE5,   /* 浅绿 */
-        .border_color = COL_WHITE,
-        .label = "OK",
-        .on_click = btn_ok_click,
-        .pressed = 0
-    };
+    font_init(NULL, 0);  /* HZK16 data not available yet, Chinese shows as blocks */
 
-    /* 定义按钮2：Cancel（红色） */
-    static ui_button_t btn_cancel = {
-        .x = 60,  .y = 260,
-        .width = 200, .height = 60,
-        .color = COL_RED,
-        .color_pressed = 0xFD20,   /* 浅红 */
-        .border_color = COL_WHITE,
-        .label = "Cancel",
-        .on_click = btn_cancel_click,
-        .pressed = 0
-    };
+    /* Register identity callback */
+    wearable_register_identity_callback(on_identity_received);
 
-    ui_button_create(0, &btn_ok);
-    ui_button_create(1, &btn_cancel);
-    ui_button_draw_all();
+    /* Initialize SLE server */
+    ret = sle_1vn_server_init();
+    if (ret != ERRCODE_SUCC) {
+        osal_printk("[main] SLE init failed 0x%x\r\n", ret);
+    } else {
+        osal_printk("[main] SLE init ok\r\n");
+        sensor_task_start();
+    }
 
-    osal_printk("[UI] touch loop start\r\n");
+    osal_printk("[main] UI loop start\r\n");
 
     for (;;) {
-        ui_touch_task_loop();
-        osal_msleep(UI_TASK_INTERVAL_MS);
+        update_sle_status();
+        ui_health_refresh();
+        ui_health_touch_loop();
+        osal_msleep(50);
     }
 
     return NULL;
 }
 
-static void ui_entry(void)
+static void app_entry(void)
 {
     osal_task *task_handle = NULL;
     osal_kthread_lock();
@@ -85,5 +80,4 @@ static void ui_entry(void)
     osal_kthread_unlock();
 }
 
-/* Run the ui_entry. */
-app_run(ui_entry);
+app_run(app_entry);
