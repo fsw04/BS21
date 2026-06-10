@@ -70,6 +70,9 @@
 #define LV_USE_ASSERT_MEM_INTEGRITY 0
 #define LV_USE_ASSERT_OBJ           0
 
+/* Override LV_ASSERT to empty to avoid -Werror=type-limits in third-party code */
+#define LV_ASSERT(expr)
+
 /* Animation */
 #define LV_USE_ANIMATION  1
 
@@ -217,5 +220,16 @@
 #define LV_USE_REFR_MONITOR   0
 #define LV_USE_MSG            0
 #define LV_USE_IME_PINYIN     0
+
+/* Extra libs */
+#define LV_USE_QRCODE         0
+#define LV_USE_BARCODE        0
+#define LV_USE_FREETYPE       0
+#define LV_USE_GIF            0
+#define LV_USE_PNG            0
+#define LV_USE_BMP            0
+#define LV_USE_SJPG           0
+#define LV_USE_RLOTTIE        0
+#define LV_USE_FFMPEG         0
 
 #endif /* LV_CONF_H */
