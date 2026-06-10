@@ -1,0 +1,108 @@
+#===============================================================================
+# @brief    Kconfig file.
+# Copyright (c) HiSilicon (Shanghai) Technologies Co., Ltd. 2024-2024. All rights reserved.
+#===============================================================================
+
+# ==================== LCD SPI 配置 ====================
+config LCD_SPI_BUS_ID
+    int
+    prompt "LCD SPI bus id."
+    depends on SAMPLE_SUPPORT_LCD_TOUCH
+    default 2
+
+config LCD_SPI_CLK_PIN
+    int
+    prompt "LCD SPI CLK pin."
+    depends on SAMPLE_SUPPORT_LCD_TOUCH
+    default 14
+
+config LCD_SPI_CLK_PIN_MODE
+    int
+    prompt "LCD SPI CLK pin mode."
+    depends on SAMPLE_SUPPORT_LCD_TOUCH
+    default 2
+
+config LCD_SPI_MOSI_PIN
+    int
+    prompt "LCD SPI MOSI pin."
+    depends on SAMPLE_SUPPORT_LCD_TOUCH
+    default 11
+
+config LCD_SPI_MOSI_PIN_MODE
+    int
+    prompt "LCD SPI MOSI pin mode."
+    depends on SAMPLE_SUPPORT_LCD_TOUCH
+    default 2
+
+config LCD_SPI_CS_PIN
+    int
+    prompt "LCD SPI CS pin (GPIO control)."
+    depends on SAMPLE_SUPPORT_LCD_TOUCH
+    default 12
+
+config LCD_SPI_CS_PIN_MODE
+    int
+    prompt "LCD SPI CS pin mode."
+    depends on SAMPLE_SUPPORT_LCD_TOUCH
+    default 0
+
+config LCD_DC_PIN
+    int
+    prompt "LCD DC (Data/Command) pin."
+    depends on SAMPLE_SUPPORT_LCD_TOUCH
+    default 13
+
+config LCD_RST_PIN
+    int
+    prompt "LCD Reset pin."
+    depends on SAMPLE_SUPPORT_LCD_TOUCH
+    default 15
+
+config LCD_BL_PIN
+    int
+    prompt "LCD Backlight pin."
+    depends on SAMPLE_SUPPORT_LCD_TOUCH
+    default 16
+
+# ==================== 触摸 I2C 配置 ====================
+config TOUCH_I2C_BUS_ID
+    int
+    prompt "Touch I2C bus id."
+    depends on SAMPLE_SUPPORT_LCD_TOUCH
+    default 0
+
+config TOUCH_I2C_SCL_PIN
+    int
+    prompt "Touch I2C SCL pin."
+    depends on SAMPLE_SUPPORT_LCD_TOUCH
+    default 25
+
+config TOUCH_I2C_SCL_PIN_MODE
+    int
+    prompt "Touch I2C SCL pin mode."
+    depends on SAMPLE_SUPPORT_LCD_TOUCH
+    default 1
+
+config TOUCH_I2C_SDA_PIN
+    int
+    prompt "Touch I2C SDA pin."
+    depends on SAMPLE_SUPPORT_LCD_TOUCH
+    default 26
+
+config TOUCH_I2C_SDA_PIN_MODE
+    int
+    prompt "Touch I2C SDA pin mode."
+    depends on SAMPLE_SUPPORT_LCD_TOUCH
+    default 1
+
+config TOUCH_INT_PIN
+    int
+    prompt "Touch Interrupt pin (-1 for unused)."
+    depends on SAMPLE_SUPPORT_LCD_TOUCH
+    default 27
+
+config TOUCH_RST_PIN
+    int
+    prompt "Touch Reset pin (-1 for unused)."
+    depends on SAMPLE_SUPPORT_LCD_TOUCH
+    default 28

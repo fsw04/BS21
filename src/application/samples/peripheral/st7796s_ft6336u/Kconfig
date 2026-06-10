@@ -1,0 +1,20 @@
+#===============================================================================
+# @brief    ST7796S LCD + FT6336U touch sample configuration
+#===============================================================================
+config ST7796S_LCD_BL_ENABLE
+    bool
+    prompt "Drive ST7796S LCD backlight GPIO high."
+    depends on SAMPLE_SUPPORT_ST7796S_FT6336U
+    default y
+
+config ST7796S_MADCTL
+    hex
+    prompt "ST7796S MADCTL value."
+    depends on SAMPLE_SUPPORT_ST7796S_FT6336U
+    default 0x48
+
+config FT6336U_USE_INT_PIN
+    bool
+    prompt "Configure FT6336U INT pin as input."
+    depends on SAMPLE_SUPPORT_ST7796S_FT6336U
+    default n

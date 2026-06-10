@@ -1,0 +1,19 @@
+{
+    "configurations": [
+        {
+            "name": "c/cpp plugin configurations",
+            "compilerPath": "",
+            "includePath": [
+                "${workspaceFolder}/**"
+            ],
+            "browse": {
+                "limitSymbolsToIncludedHeaders": true,
+                "path": [
+                    "${workspaceFolder}/**"
+                ]
+            },
+            "intelliSenseMode": ""
+        }
+    ],
+    "version": 4
+}

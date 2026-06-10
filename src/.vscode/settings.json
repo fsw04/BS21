@@ -1,0 +1,16 @@
+{
+    "files.associations": {
+        "pwm.h": "c",
+        "spi.h": "c",
+        "soc_osal.h": "c",
+        "osal_timer.h": "c",
+        "pinctrl.h": "c",
+        "lv_port_disp.h": "c",
+        "lv_port_indev.h": "c",
+        "i2c.h": "c",
+        "pinctrl_porting.h": "c",
+        "lcd_bus.h": "c",
+        "ft6336u.h": "c",
+        "st7796s.h": "c"
+    }
+}
