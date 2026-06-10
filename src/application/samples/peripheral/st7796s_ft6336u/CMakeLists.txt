@@ -25,124 +25,42 @@ if(CONFIG_ST7796S_SLE_1VN_ENABLE)
         PARENT_SCOPE)
 endif()
 
-# --- LVGL 源文件（仅包含核心 + 必要模块，避免链接未使用代码） ---
-set(LVGL_DIR "${CMAKE_CURRENT_SOURCE_DIR}/lvgl/src")
+# --- LVGL 源文件（GLOB_RECURSE 但排除 GPU/SDL 等不需要的目录） ---
+file(GLOB_RECURSE LVGL_ALL "${CMAKE_CURRENT_SOURCE_DIR}/lvgl/src/*.c")
 
-# 核心
-set(LVGL_CORE
-    ${LVGL_DIR}/core/lv_disp.c
-    ${LVGL_DIR}/core/lv_event.c
-    ${LVGL_DIR}/core/lv_indev.c
-    ${LVGL_DIR}/core/lv_obj.c
-    ${LVGL_DIR}/core/lv_obj_class.c
-    ${LVGL_DIR}/core/lv_obj_draw.c
-    ${LVGL_DIR}/core/lv_obj_pos.c
-    ${LVGL_DIR}/core/lv_obj_scroll.c
-    ${LVGL_DIR}/core/lv_obj_style.c
-    ${LVGL_DIR}/core/lv_obj_style_gen.c
-    ${LVGL_DIR}/core/lv_obj_tree.c
-    ${LVGL_DIR}/core/lv_refr.c
-    ${LVGL_DIR}/core/lv_theme.c
-)
+# 排除不需要的目录
+list(FILTER LVGL_ALL EXCLUDE REGEX "/draw/sdl/")
+list(FILTER LVGL_ALL EXCLUDE REGEX "/draw/stm32_dma2d/")
+list(FILTER LVGL_ALL EXCLUDE REGEX "/draw/nxp/")
+list(FILTER LVGL_ALL EXCLUDE REGEX "/draw/arm2d/")
+list(FILTER LVGL_ALL EXCLUDE REGEX "/draw/renesas/")
+list(FILTER LVGL_ALL EXCLUDE REGEX "/draw/swm341_dma2d/")
+list(FILTER LVGL_ALL EXCLUDE REGEX "/extra/libs/")
+list(FILTER LVGL_ALL EXCLUDE REGEX "/extra/others/")
+list(FILTER LVGL_ALL EXCLUDE REGEX "/extra/widgets/span/")
+list(FILTER LVGL_ALL EXCLUDE REGEX "/extra/widgets/spinner/")
+list(FILTER LVGL_ALL EXCLUDE REGEX "/extra/widgets/keyboard/")
+list(FILTER LVGL_ALL EXCLUDE REGEX "/extra/widgets/colorwheel/")
+list(FILTER LVGL_ALL EXCLUDE REGEX "/extra/widgets/meter/")
+list(FILTER LVGL_ALL EXCLUDE REGEX "/extra/widgets/win/")
+list(FILTER LVGL_ALL EXCLUDE REGEX "/extra/widgets/animimg/")
+list(FILTER LVGL_ALL EXCLUDE REGEX "/extra/widgets/imgbtn/")
+list(FILTER LVGL_ALL EXCLUDE REGEX "/extra/widgets/msgbox/")
+list(FILTER LVGL_ALL EXCLUDE REGEX "/extra/widgets/calendar/")
+list(FILTER LVGL_ALL EXCLUDE REGEX "/extra/widgets/spinbox/")
+list(FILTER LVGL_ALL EXCLUDE REGEX "/extra/widgets/tileview/")
+list(FILTER LVGL_ALL EXCLUDE REGEX "/extra/widgets/chart/")
+list(FILTER LVGL_ALL EXCLUDE REGEX "/extra/widgets/tabview/")
+list(FILTER LVGL_ALL EXCLUDE REGEX "/extra/widgets/list/")
+list(FILTER LVGL_ALL EXCLUDE REGEX "/extra/widgets/led/")
+list(FILTER LVGL_ALL EXCLUDE REGEX "/extra/widgets/menu/")
+list(FILTER LVGL_ALL EXCLUDE REGEX "/extra/layouts/grid/")
+list(FILTER LVGL_ALL EXCLUDE REGEX "/font/lv_font_montserrat_")
+list(FILTER LVGL_ALL EXCLUDE REGEX "/font/lv_font_dejavu_")
+list(FILTER LVGL_ALL EXCLUDE REGEX "/font/lv_font_simsun_")
+list(FILTER LVGL_ALL EXCLUDE REGEX "/font/lv_font_unscii_16")
 
-# 绘制
-set(LVGL_DRAW
-    ${LVGL_DIR}/draw/lv_draw.c
-    ${LVGL_DIR}/draw/lv_draw_arc.c
-    ${LVGL_DIR}/draw/lv_draw_rect.c
-    ${LVGL_DIR}/draw/lv_draw_label.c
-    ${LVGL_DIR}/draw/lv_draw_line.c
-    ${LVGL_DIR}/draw/lv_draw_mask.c
-    ${LVGL_DIR}/draw/lv_draw_transform.c
-    ${LVGL_DIR}/draw/lv_draw_layer.c
-    ${LVGL_DIR}/draw/lv_draw_triangle.c
-    ${LVGL_DIR}/draw/lv_img_buf.c
-    ${LVGL_DIR}/draw/lv_img_cache.c
-    ${LVGL_DIR}/draw/lv_img_decoder.c
-    ${LVGL_DIR}/draw/lv_draw_img.c
-    ${LVGL_DIR}/draw/sw/lv_draw_sw.c
-    ${LVGL_DIR}/draw/sw/lv_draw_sw_arc.c
-    ${LVGL_DIR}/draw/sw/lv_draw_sw_blend.c
-    ${LVGL_DIR}/draw/sw/lv_draw_sw_rect.c
-    ${LVGL_DIR}/draw/sw/lv_draw_sw_letter.c
-    ${LVGL_DIR}/draw/sw/lv_draw_sw_line.c
-    ${LVGL_DIR}/draw/sw/lv_draw_sw_layer.c
-    ${LVGL_DIR}/draw/sw/lv_draw_sw_mask.c
-    ${LVGL_DIR}/draw/sw/lv_draw_sw_transform.c
-    ${LVGL_DIR}/draw/sw/lv_draw_sw_gradient.c
-    ${LVGL_DIR}/draw/sw/lv_draw_sw_dither.c
-    ${LVGL_DIR}/draw/sw/lv_draw_sw_img.c
-    ${LVGL_DIR}/draw/sw/lv_draw_sw_polygon.c
-)
-
-# 字体
-set(LVGL_FONT
-    ${LVGL_DIR}/font/lv_font.c
-    ${LVGL_DIR}/font/lv_font_fmt_txt.c
-    ${LVGL_DIR}/font/lv_font_unscii_8.c
-)
-
-# HAL
-set(LVGL_HAL
-    ${LVGL_DIR}/hal/lv_hal_disp.c
-    ${LVGL_DIR}/hal/lv_hal_indev.c
-    ${LVGL_DIR}/hal/lv_hal_tick.c
-)
-
-# 杂项
-set(LVGL_MISC
-    ${LVGL_DIR}/misc/lv_area.c
-    ${LVGL_DIR}/misc/lv_async.c
-    ${LVGL_DIR}/misc/lv_bidi.c
-    ${LVGL_DIR}/misc/lv_color.c
-    ${LVGL_DIR}/misc/lv_gc.c
-    ${LVGL_DIR}/misc/lv_ll.c
-    ${LVGL_DIR}/misc/lv_log.c
-    ${LVGL_DIR}/misc/lv_lru.c
-    ${LVGL_DIR}/misc/lv_math.c
-    ${LVGL_DIR}/misc/lv_mem.c
-    ${LVGL_DIR}/misc/lv_printf.c
-    ${LVGL_DIR}/misc/lv_style.c
-    ${LVGL_DIR}/misc/lv_style_gen.c
-    ${LVGL_DIR}/misc/lv_timer.c
-    ${LVGL_DIR}/misc/lv_tlsf.c
-    ${LVGL_DIR}/misc/lv_txt.c
-    ${LVGL_DIR}/misc/lv_txt_ap.c
-    ${LVGL_DIR}/misc/lv_utils.c
-)
-
-# 控件
-set(LVGL_WIDGETS
-    ${LVGL_DIR}/widgets/lv_arc.c
-    ${LVGL_DIR}/widgets/lv_bar.c
-    ${LVGL_DIR}/widgets/lv_btn.c
-    ${LVGL_DIR}/widgets/lv_label.c
-)
-
-# 主题
-set(LVGL_EXTRA
-    ${LVGL_DIR}/extra/lv_extra.c
-    ${LVGL_DIR}/extra/themes/default/lv_theme_default.c
-    ${LVGL_DIR}/extra/themes/basic/lv_theme_basic.c
-)
-
-# 布局
-set(LVGL_LAYOUT
-    ${LVGL_DIR}/layout/lv_flex.c
-    ${LVGL_DIR}/layout/lv_layout.c
-)
-
-set(LVGL_SOURCES
-    ${LVGL_CORE}
-    ${LVGL_DRAW}
-    ${LVGL_FONT}
-    ${LVGL_HAL}
-    ${LVGL_MISC}
-    ${LVGL_WIDGETS}
-    ${LVGL_EXTRA}
-    ${LVGL_LAYOUT}
-)
-
+set(LVGL_SOURCES ${LVGL_ALL})
 set(SOURCES "${SOURCES}" ${LVGL_SOURCES} PARENT_SCOPE)
 
 # --- 头文件搜索路径 ---
