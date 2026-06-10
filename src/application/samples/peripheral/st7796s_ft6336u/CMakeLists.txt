@@ -1,5 +1,5 @@
 #===============================================================================
-# ST7796S LCD + FT6336U touch + LVGL + SLE 1VN health monitor
+# ST7796S LCD + FT6336U touch + LVGL health monitor
 #===============================================================================
 
 # --- 项目源文件 ---
@@ -12,13 +12,18 @@ set(SOURCES "${SOURCES}"
 
     "${CMAKE_CURRENT_SOURCE_DIR}/tasks/main.c"
     "${CMAKE_CURRENT_SOURCE_DIR}/tasks/ui_health_lvgl.c"
-
-    "${CMAKE_CURRENT_SOURCE_DIR}/sle/sle_1vn_server.c"
-    "${CMAKE_CURRENT_SOURCE_DIR}/sle/sle_1vn_server_adv.c"
-    "${CMAKE_CURRENT_SOURCE_DIR}/sle/measurement_session.c"
-    "${CMAKE_CURRENT_SOURCE_DIR}/sle/sensor_collect.c"
-    "${CMAKE_CURRENT_SOURCE_DIR}/sle/sensor_task.c"
     PARENT_SCOPE)
+
+# --- SLE 源文件（暂时禁用，验证 LVGL 后再启用） ---
+if(CONFIG_ST7796S_SLE_1VN_ENABLE)
+    set(SOURCES "${SOURCES}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/sle/sle_1vn_server.c"
+        "${CMAKE_CURRENT_SOURCE_DIR}/sle/sle_1vn_server_adv.c"
+        "${CMAKE_CURRENT_SOURCE_DIR}/sle/measurement_session.c"
+        "${CMAKE_CURRENT_SOURCE_DIR}/sle/sensor_collect.c"
+        "${CMAKE_CURRENT_SOURCE_DIR}/sle/sensor_task.c"
+        PARENT_SCOPE)
+endif()
 
 # --- LVGL 源文件 ---
 file(GLOB_RECURSE LVGL_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/lvgl/src/*.c")
