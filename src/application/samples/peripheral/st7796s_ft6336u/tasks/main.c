@@ -20,7 +20,7 @@
 #include "sensor_task.h"
 
 #define UI_TASK_PRIO                    24
-#define UI_TASK_STACK_SIZE              0x8000
+#define UI_TASK_STACK_SIZE              0x3000
 #define LVGL_TICK_PERIOD_MS             5
 #define SLE_STATUS_POLL_MS              500
 
@@ -77,7 +77,10 @@ static void *ui_task(const char *arg)
     /* 注册身份回调 */
     wearable_register_identity_callback(on_identity_received);
 
+    /* 暂时禁用 SLE，先验证 LVGL 显示 */
+#if 0
     /* 初始化 SLE 服务端 */
+    osal_printk("[main] SLE init...\r\n");
     ret = sle_1vn_server_init();
     if (ret != ERRCODE_SUCC) {
         osal_printk("[main] SLE init failed 0x%x\r\n", ret);
@@ -85,6 +88,9 @@ static void *ui_task(const char *arg)
         osal_printk("[main] SLE init ok\r\n");
         sensor_task_start();
     }
+#else
+    osal_printk("[main] SLE disabled for testing\r\n");
+#endif
 
     osal_printk("[main] LVGL loop start\r\n");
 

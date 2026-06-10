@@ -3,10 +3,10 @@
 #include "lcd_bus.h"
 #include "soc_osal.h"
 
-#define LV_DISP_BUF_LINES 10  /* 部分刷新：每次刷新 10 行，降低 RAM 占用 */
+#define LV_DISP_BUF_LINES 5  /* 部分刷新：5 行，降低 RAM 占用 (~4.8KB) */
 
 static lv_disp_draw_buf_t draw_buf;
-static lv_color_t buf[LV_HOR_RES_MAX * LV_DISP_BUF_LINES];
+static lv_color_t *buf = NULL;  /* 动态分配，避免占用 BSS 段 */
 
 static void disp_flush_cb(lv_disp_drv_t *drv, const lv_area_t *area, lv_color_t *color_p)
 {
@@ -33,6 +33,15 @@ static void disp_flush_cb(lv_disp_drv_t *drv, const lv_area_t *area, lv_color_t 
 
 void lv_port_disp_init(void)
 {
+    /* 动态分配显示缓冲 */
+    uint32_t buf_size = LV_HOR_RES_MAX * LV_DISP_BUF_LINES * sizeof(lv_color_t);
+    buf = (lv_color_t *)osal_malloc(buf_size);
+    if (buf == NULL) {
+        osal_printk("[lv_port_disp] malloc buf failed! size=%u\r\n", (unsigned int)buf_size);
+        return;
+    }
+    osal_printk("[lv_port_disp] buf alloc ok, size=%u\r\n", (unsigned int)buf_size);
+
     lv_disp_draw_buf_init(&draw_buf, buf, NULL, LV_HOR_RES_MAX * LV_DISP_BUF_LINES);
 
     static lv_disp_drv_t disp_drv;
