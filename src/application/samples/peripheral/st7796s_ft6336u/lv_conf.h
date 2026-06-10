@@ -135,6 +135,7 @@
 #define LV_USE_LED          0
 #define LV_USE_IMGBTN       0
 #define LV_USE_PANEL        1
+#define LV_USE_ANIMIMG      0
 
 /*==================
    THEMES
