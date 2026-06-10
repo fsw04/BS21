@@ -15,7 +15,7 @@ config ST7796S_MADCTL
     hex
     prompt "ST7796S MADCTL value."
     depends on SAMPLE_SUPPORT_ST7796S_FT6336U
-    default 0x48
+    default 0x28
 
 #-------------------------------------------------------------------------------
 # 触控配置

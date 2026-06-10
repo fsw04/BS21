@@ -3,8 +3,10 @@
 # Copyright (c) HiSilicon (Shanghai) Technologies Co., Ltd. 2023-2023. All rights reserved.
 #===============================================================================
 set(SLE_1VN_SAMPLE_ENABLED false)
-if(DEFINED CONFIG_ENABLE_SLE_1VN OR "CONFIG_ENABLE_SLE_1VN" IN_LIST DEFINES OR "CONFIG_ENABLE_SLE_1VN=1" IN_LIST DEFINES)
-set(SLE_1VN_SAMPLE_ENABLED true)
+if(DEFINED CONFIG_ENABLE_SLE_1VN AND NOT DEFINED CONFIG_ST7796S_SLE_1VN_ENABLE)
+  if(CONFIG_ENABLE_SLE_1VN OR "CONFIG_ENABLE_SLE_1VN=1" IN_LIST DEFINES)
+    set(SLE_1VN_SAMPLE_ENABLED true)
+  endif()
 endif()
 
 if(SLE_1VN_SAMPLE_ENABLED)

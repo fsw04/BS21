@@ -8,8 +8,8 @@
 extern "C" {
 #endif
 
-#define ST7796S_WIDTH 320
-#define ST7796S_HEIGHT 480
+#define ST7796S_WIDTH 480
+#define ST7796S_HEIGHT 320
 
 errcode_t st7796s_init(void);
 errcode_t st7796s_set_window(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1);
