@@ -33,3 +33,6 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 # --- LVGL 编译定义 ---
 add_definitions(-DLV_CONF_INCLUDE_SIMPLE=1)
 add_definitions(-DLV_LVGL_H_INCLUDE_SIMPLE=1)
+
+# --- LVGL 源码放宽编译警告（第三方代码，不应因 -Werror 阻断构建） ---
+set_source_files_properties(${LVGL_SOURCES} PROPERTIES COMPILE_FLAGS "-Wno-jump-misses-init -Wno-type-limits -Wno-unused-variable")
