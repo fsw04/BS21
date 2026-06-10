@@ -55,17 +55,24 @@ set(LVGL_DRAW
     ${LVGL_DIR}/draw/lv_draw_mask.c
     ${LVGL_DIR}/draw/lv_draw_transform.c
     ${LVGL_DIR}/draw/lv_draw_layer.c
+    ${LVGL_DIR}/draw/lv_draw_triangle.c
     ${LVGL_DIR}/draw/lv_img_buf.c
     ${LVGL_DIR}/draw/lv_img_cache.c
+    ${LVGL_DIR}/draw/lv_img_decoder.c
+    ${LVGL_DIR}/draw/lv_draw_img.c
     ${LVGL_DIR}/draw/sw/lv_draw_sw.c
     ${LVGL_DIR}/draw/sw/lv_draw_sw_arc.c
     ${LVGL_DIR}/draw/sw/lv_draw_sw_blend.c
     ${LVGL_DIR}/draw/sw/lv_draw_sw_rect.c
-    ${LVGL_DIR}/draw/sw/lv_draw_sw_label.c
+    ${LVGL_DIR}/draw/sw/lv_draw_sw_letter.c
     ${LVGL_DIR}/draw/sw/lv_draw_sw_line.c
     ${LVGL_DIR}/draw/sw/lv_draw_sw_layer.c
     ${LVGL_DIR}/draw/sw/lv_draw_sw_mask.c
     ${LVGL_DIR}/draw/sw/lv_draw_sw_transform.c
+    ${LVGL_DIR}/draw/sw/lv_draw_sw_gradient.c
+    ${LVGL_DIR}/draw/sw/lv_draw_sw_dither.c
+    ${LVGL_DIR}/draw/sw/lv_draw_sw_img.c
+    ${LVGL_DIR}/draw/sw/lv_draw_sw_polygon.c
 )
 
 # 字体
@@ -110,7 +117,6 @@ set(LVGL_WIDGETS
     ${LVGL_DIR}/widgets/lv_bar.c
     ${LVGL_DIR}/widgets/lv_btn.c
     ${LVGL_DIR}/widgets/lv_label.c
-    ${LVGL_DIR}/extra/widgets/lv_widgets.c
 )
 
 # 主题
