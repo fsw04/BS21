@@ -158,7 +158,7 @@ static void font_write_glyph(const uint8_t *glyph, uint8_t glyph_w, uint8_t glyp
             uint16_t color = pixel ? fg : bg;
             for (uint8_t sy = 0; sy < scale; sy++) {
                 for (uint8_t sx = 0; sx < scale; sx++) {
-                    if ((idx + 1) < (sizeof(buf) / 2)) {
+                    if ((uint32_t)(idx + 1) < (sizeof(buf) / 2)) {
                         buf[idx * 2]     = color >> 8;
                         buf[idx * 2 + 1] = color & 0xFF;
                     }
@@ -189,7 +189,6 @@ static void font_write_hzk16_glyph(const uint8_t *dot_data, uint16_t x, uint16_t
 {
     uint16_t pw = 16 * scale;
     uint16_t ph = 16 * scale;
-    uint32_t total = (uint32_t)pw * ph;
 
     /* 缩放 1x: 16*16=256 像素, 512 字节; 缩放 2x: 1024*2=2048 字节, 需分块 */
     st7796s_set_window(x, y, x + pw - 1, y + ph - 1);
