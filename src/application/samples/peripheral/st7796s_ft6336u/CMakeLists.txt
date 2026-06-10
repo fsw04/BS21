@@ -15,5 +15,6 @@ set(SOURCES "${SOURCES}"
     "${CMAKE_CURRENT_SOURCE_DIR}/sle/sensor_task.c"
     PARENT_SCOPE)
 
-# SLE 子目录头文件搜索路径
+# 子目录头文件搜索路径
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/drivers)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/sle)
