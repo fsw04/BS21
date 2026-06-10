@@ -71,7 +71,7 @@
 #define LV_USE_ASSERT_OBJ           0
 
 /* Animation */
-#define LV_USE_ANIMATION  1
+#define LV_USE_ANIMATION  0
 
 /* Asynchronous */
 #define LV_USE_ASYNC      0
@@ -85,12 +85,8 @@
 #define LV_USE_FS_FATFS   0
 
 /* Images */
-#define LV_USE_IMG        1
-#define LV_USE_IMG_DECODER 1
-#if LV_USE_IMG_DECODER
-    #define LV_IMG_CF_INDEXED   1
-    #define LV_IMG_CF_ALPHA     1
-#endif
+#define LV_USE_IMG        0
+#define LV_USE_IMG_DECODER 0
 #define LV_USE_FS_MEMFS   0
 
 /* Glyph (font) storage */
@@ -105,14 +101,14 @@
 /*========================
    WIDGET USAGE
  *========================*/
-#define LV_USE_ARC          1
-#define LV_USE_BAR          1
+#define LV_USE_ARC          0
+#define LV_USE_BAR          0
 #define LV_USE_BTN          1
 #define LV_USE_BTNMATRIX    0
 #define LV_USE_CANVAS       0
 #define LV_USE_CHECKBOX     0
 #define LV_USE_DROPDOWN     0
-#define LV_USE_IMG          1
+#define LV_USE_IMG          0
 #define LV_USE_LABEL        1
 #define LV_USE_LINE         0
 #define LV_USE_ROLLER       0
@@ -163,8 +159,8 @@
 #define LV_FONT_MONTSERRAT_8     0
 #define LV_FONT_MONTSERRAT_10    0
 #define LV_FONT_MONTSERRAT_12    0
-#define LV_FONT_MONTSERRAT_14    1
-#define LV_FONT_MONTSERRAT_16    1
+#define LV_FONT_MONTSERRAT_14    0
+#define LV_FONT_MONTSERRAT_16    0
 #define LV_FONT_MONTSERRAT_18    0
 #define LV_FONT_MONTSERRAT_20    0
 #define LV_FONT_MONTSERRAT_22    0
@@ -186,10 +182,10 @@
 #define LV_FONT_MONTSERRAT_28_COMPRESSED   0
 #define LV_FONT_DEJAVU_16_PERSIAN_HEBREW   0
 #define LV_FONT_SIMSUN_16_CJK             0
-#define LV_FONT_UNSCII_8                   0
+#define LV_FONT_UNSCII_8                   1
 #define LV_FONT_UNSCII_16                  0
 
-#define LV_FONT_DEFAULT     &lv_font_montserrat_16
+#define LV_FONT_DEFAULT     &lv_font_unscii_8
 #define LV_FONT_FMT_TXT_LARGE  0
 #define LV_USE_FONT_PLACEHOLDER 1
 
