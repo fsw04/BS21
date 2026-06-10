@@ -45,7 +45,7 @@
 #define LV_TICK_CUSTOM           1
 #if LV_TICK_CUSTOM
     #define LV_TICK_CUSTOM_INCLUDE "soc_osal.h"
-    #define LV_TICK_CUSTOM_SYS_TIME_EXPR (osal_msleep(0), (uint32_t)osal_get_tick_count())
+    #define LV_TICK_CUSTOM_SYS_TIME_EXPR (osal_jiffies_to_msecs((unsigned int)osal_get_jiffies()))
 #endif
 
 #define LV_DEF_REFR_PERIOD       30
