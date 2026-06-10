@@ -63,15 +63,12 @@
     #define LV_LOG_PRINTF 0
 #endif
 
-/* Asserts */
+/* Asserts - all disabled to save code size and avoid -Werror=type-limits */
 #define LV_USE_ASSERT_NULL          0
 #define LV_USE_ASSERT_MALLOC        0
 #define LV_USE_ASSERT_STYLE         0
 #define LV_USE_ASSERT_MEM_INTEGRITY 0
 #define LV_USE_ASSERT_OBJ           0
-
-/* Override LV_ASSERT to empty to avoid -Werror=type-limits in third-party code */
-#define LV_ASSERT(expr)
 
 /* Animation */
 #define LV_USE_ANIMATION  1
