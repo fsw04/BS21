@@ -29,7 +29,7 @@ config FT6336U_USE_INT_PIN
 #-------------------------------------------------------------------------------
 # SLE 1VN 服务端配置
 #-------------------------------------------------------------------------------
-config ENABLE_SLE_1VN
+config ST7796S_SLE_1VN_ENABLE
     bool
     prompt "Enable SLE 1VN server functionality."
     depends on SAMPLE_SUPPORT_ST7796S_FT6336U
@@ -39,20 +39,20 @@ config SLE_1VN_SERVER_MAC_ADDR
     hex
     default 0x787060889647
     prompt "Set the SLE 1VN server MAC address."
-    depends on ENABLE_SLE_1VN
+    depends on ST7796S_SLE_1VN_ENABLE
 
 config SLE_1VN_SERVER_ID
     int
     range 0 99
     default 1
     prompt "Set the watch ID of SLE 1VN server."
-    depends on ENABLE_SLE_1VN
+    depends on ST7796S_SLE_1VN_ENABLE
 
 config SLE_1VN_SERVER_NAME_PREFIX
     string
     prompt "Set the advertised name prefix of SLE 1VN server."
     default "watch"
-    depends on ENABLE_SLE_1VN
+    depends on ST7796S_SLE_1VN_ENABLE
 
 #-------------------------------------------------------------------------------
 # 字体配置
