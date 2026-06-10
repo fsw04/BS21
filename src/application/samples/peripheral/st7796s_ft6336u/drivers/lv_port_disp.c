@@ -3,7 +3,7 @@
 #include "lcd_bus.h"
 #include "soc_osal.h"
 
-#define LV_DISP_BUF_LINES 20  /* 部分刷新：每次刷新 20 行 */
+#define LV_DISP_BUF_LINES 10  /* 部分刷新：每次刷新 10 行，降低 RAM 占用 */
 
 static lv_disp_draw_buf_t draw_buf;
 static lv_color_t buf[LV_HOR_RES_MAX * LV_DISP_BUF_LINES];
