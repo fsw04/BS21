@@ -59,7 +59,7 @@ static uint16_t sle_adv_append_tlv(uint8_t *data, uint16_t max_len, uint16_t ind
     return (uint16_t)(index + value_len);
 }
 
-static const char *sle_1vn_get_local_name(void)
+const char *sle_1vn_get_local_name(void)
 {
     if (g_sle_1vn_local_name[0] != '\0') {
         return g_sle_1vn_local_name;

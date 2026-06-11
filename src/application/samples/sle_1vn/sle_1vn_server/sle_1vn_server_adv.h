@@ -46,5 +46,6 @@ typedef enum sle_adv_data {
 errcode_t sle_1vn_server_adv_init(void);
 errcode_t sle_1vn_announce_register_cbks(void);
 errcode_t sle_1vn_server_sample_dev_cbk_register(void);
+const char *sle_1vn_get_local_name(void);
 
 #endif

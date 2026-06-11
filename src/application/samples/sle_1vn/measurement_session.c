@@ -1,10 +1,8 @@
 #include "measurement_session.h"
 
-#include <stdio.h>
 #include <string.h>
 #include "securec.h"
-#include "efuse.h"
-#include "errcode.h"
+#include "sle_1vn_server_adv.h"
 
 static void measurement_copy_text(char *dst, uint32_t dst_len, const char *src)
 {
@@ -27,16 +25,9 @@ void measurement_session_init(measurement_session_t *session)
     (void)memset_s(session, sizeof(measurement_session_t), 0, sizeof(measurement_session_t));
     session->required_mask = MEASUREMENT_REQUIRED_MASK;
 
-    uint8_t soc_id[20] = {0};
-    errcode_t ret = uapi_soc_read_id(soc_id, sizeof(soc_id));
-    if (ret == ERRCODE_SUCC) {
-        /* Use last 4 bytes of SoC ID as hex suffix, e.g. "watch_a1b2c3d4" */
-        int written = sprintf_s(session->device_id, sizeof(session->device_id),
-                                "watch_%02x%02x%02x%02x",
-                                soc_id[16], soc_id[17], soc_id[18], soc_id[19]);
-        if (written <= 0) {
-            measurement_copy_text(session->device_id, sizeof(session->device_id), "watch_unknown");
-        }
+    const char *local_name = sle_1vn_get_local_name();
+    if (local_name != NULL) {
+        measurement_copy_text(session->device_id, sizeof(session->device_id), local_name);
     } else {
         measurement_copy_text(session->device_id, sizeof(session->device_id), "watch_unknown");
     }
