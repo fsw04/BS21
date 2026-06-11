@@ -43,6 +43,7 @@ typedef enum sle_adv_data {
     SLE_ADV_DATA_TYPE_MANUFACTURER_SPECIFIC_DATA              = 0xFF
 } sle_adv_data_t;
 
+const char *sle_1vn_get_device_name(void);
 errcode_t sle_1vn_server_adv_init(void);
 errcode_t sle_1vn_announce_register_cbks(void);
 errcode_t sle_1vn_server_sample_dev_cbk_register(void);

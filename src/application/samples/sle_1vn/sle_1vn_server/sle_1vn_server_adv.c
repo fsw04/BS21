@@ -73,6 +73,11 @@ static const char *sle_1vn_get_local_name(void)
     return g_sle_1vn_local_name;
 }
 
+const char *sle_1vn_get_device_name(void)
+{
+    return sle_1vn_get_local_name();
+}
+
 static void sle_power_on_cbk(uint8_t status)
 {
     osal_printk("%s sle power on: 0x%x\r\n", SLE_1VN_SERVER_LOG, status);

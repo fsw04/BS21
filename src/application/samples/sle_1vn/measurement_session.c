@@ -2,6 +2,7 @@
 
 #include <string.h>
 #include "securec.h"
+#include "sle_1vn_server_adv.h"
 
 static void measurement_copy_text(char *dst, uint32_t dst_len, const char *src)
 {
@@ -23,7 +24,9 @@ void measurement_session_init(measurement_session_t *session)
 
     (void)memset_s(session, sizeof(measurement_session_t), 0, sizeof(measurement_session_t));
     session->required_mask = MEASUREMENT_REQUIRED_MASK;
-    measurement_copy_text(session->device_id, sizeof(session->device_id), "watch_01");
+    const char *device_name = sle_1vn_get_device_name();
+    measurement_copy_text(session->device_id, sizeof(session->device_id),
+                          (device_name != NULL) ? device_name : "unknown");
 }
 
 void measurement_session_set_identity(measurement_session_t *session, const char *name, const char *id_card)
