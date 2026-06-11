@@ -115,7 +115,7 @@ void lcd_bus_reset(void)
 
 void lcd_bus_backlight_set(uint8_t enabled)
 {
-#if defined(ST7796S_LCD_BL_ENABLE) && (ST7796S_LCD_BL_ENABLE == 1)
+#if defined(CONFIG_ST7796S_LCD_BL_ENABLE) && (CONFIG_ST7796S_LCD_BL_ENABLE == 1)
     uapi_gpio_set_val(ST7796S_LCD_BL_PIN, enabled ? GPIO_LEVEL_HIGH : GPIO_LEVEL_LOW);
 #else
     (void)enabled;

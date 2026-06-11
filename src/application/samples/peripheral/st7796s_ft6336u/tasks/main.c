@@ -1,79 +1,92 @@
 /**
  * Copyright (c) HiSilicon (Shanghai) Technologies Co., Ltd. 2024-2024. All rights reserved.
  *
- * Description: Provides UI button sample source \n
- *
- * History: \n
- * 2024-03-04, Create file. \n
+ * Description: Health monitor with hand-written UI + SLE 1VN \n
  */
 #include "soc_osal.h"
 #include "securec.h"
 #include "app_init.h"
-#include "ui_button.h"
+#include "ui_page_health.h"
+#include "../drivers/font.h"
+#include "../drivers/st7796s.h"
+#include "../drivers/ft6336u.h"
+#include "../drivers/lcd_bus.h"
+#include "../sle/sle_1vn_server.h"
+#include "../sle/sensor_task.h"
 
 #define UI_TASK_PRIO                    24
 #define UI_TASK_STACK_SIZE              0x2000
+#define UI_LOOP_PERIOD_MS               50
+#define SLE_STATUS_POLL_MS              500
 
-/* 按钮点击回调 */
-static void btn_ok_click(void)
+static void on_identity_received(const char *name, const char *id_number)
 {
-    osal_printk("[UI] >>> OK Button Clicked!\r\n");
+    osal_printk("[main] identity: %s %s\r\n", name, id_number);
+    ui_health_set_identity(name, id_number);
 }
 
-static void btn_cancel_click(void)
+static void update_sle_status(void)
 {
-    osal_printk("[UI] >>> Cancel Button Clicked!\r\n");
+    bool connected = sle_1vn_server_is_connected();
+    ui_health_set_sle_status(connected, "watch-01", connected ? -45 : 0);
 }
 
 static void *ui_task(const char *arg)
 {
-    (void)(arg);  /* 消除 unused parameter 警告，替代 unused(arg) */
+    (void)arg;
 
-    errcode_t ret = ui_init();
+    osal_printk("[main] ui_task enter\r\n");
+
+    /* 初始化 UI */
+    errcode_t ret = ui_health_init();
     if (ret != ERRCODE_SUCC) {
-        osal_printk("[UI] init failed, task exit\r\n");
+        osal_printk("[main] UI init failed 0x%x\r\n", ret);
         return NULL;
     }
+    osal_printk("[main] UI init ok\r\n");
 
-    /* 定义按钮1：OK（绿色） */
-    static ui_button_t btn_ok = {
-        .x = 60,  .y = 180,
-        .width = 200, .height = 60,
-        .color = COL_GREEN,
-        .color_pressed = 0xAFE5,   /* 浅绿 */
-        .border_color = COL_WHITE,
-        .label = "OK",
-        .on_click = btn_ok_click,
-        .pressed = 0
-    };
+    /* 字体初始化（HZK16 暂不可用，中文显示为方块） */
+    font_init(NULL, 0);
 
-    /* 定义按钮2：Cancel（红色） */
-    static ui_button_t btn_cancel = {
-        .x = 60,  .y = 260,
-        .width = 200, .height = 60,
-        .color = COL_RED,
-        .color_pressed = 0xFD20,   /* 浅红 */
-        .border_color = COL_WHITE,
-        .label = "Cancel",
-        .on_click = btn_cancel_click,
-        .pressed = 0
-    };
+    /* 注册身份回调 */
+    wearable_register_identity_callback(on_identity_received);
 
-    ui_button_create(0, &btn_ok);
-    ui_button_create(1, &btn_cancel);
-    ui_button_draw_all();
+    /* 初始化 SLE 服务端 */
+    osal_printk("[main] SLE init...\r\n");
+    ret = sle_1vn_server_init();
+    if (ret != ERRCODE_SUCC) {
+        osal_printk("[main] SLE init failed 0x%x\r\n", ret);
+    } else {
+        osal_printk("[main] SLE init ok\r\n");
+        sensor_task_start();
+    }
 
-    osal_printk("[UI] touch loop start\r\n");
+    osal_printk("[main] UI loop start\r\n");
+
+    uint32_t last_sle_poll = 0;
 
     for (;;) {
-        ui_touch_task_loop();
-        osal_msleep(UI_TASK_INTERVAL_MS);
+        uint32_t now = osal_jiffies_to_msecs((unsigned int)osal_get_jiffies());
+
+        /* 刷新 UI */
+        ui_health_refresh();
+
+        /* 触控处理 */
+        ui_health_touch_loop();
+
+        /* 定期更新 SLE 状态 */
+        if ((now - last_sle_poll) >= SLE_STATUS_POLL_MS) {
+            update_sle_status();
+            last_sle_poll = now;
+        }
+
+        osal_msleep(UI_LOOP_PERIOD_MS);
     }
 
     return NULL;
 }
 
-static void ui_entry(void)
+static void app_entry(void)
 {
     osal_task *task_handle = NULL;
     osal_kthread_lock();
@@ -85,5 +98,4 @@ static void ui_entry(void)
     osal_kthread_unlock();
 }
 
-/* Run the ui_entry. */
-app_run(ui_entry);
+app_run(app_entry);

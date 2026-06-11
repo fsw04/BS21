@@ -11,6 +11,10 @@
         "pinctrl_porting.h": "c",
         "lcd_bus.h": "c",
         "ft6336u.h": "c",
-        "st7796s.h": "c"
+        "st7796s.h": "c",
+        "sensor_task.h": "c",
+        "measurement_session.h": "c",
+        "sle_1vn_server.h": "c",
+        "ui_page_health.h": "c"
     }
 }
