@@ -17,6 +17,7 @@
 #include "soc_osal.h"
 #include "sle_1vn_server.h"
 #include "sle_1vn_server_adv.h"
+#include "efuse.h"
 
 #define NAME_MAX_LENGTH                     16
 #define SLE_CONN_INTV_MIN_DEFAULT           0x64
@@ -64,10 +65,21 @@ static const char *sle_1vn_get_local_name(void)
         return g_sle_1vn_local_name;
     }
 
-    if (sprintf_s(g_sle_1vn_local_name, sizeof(g_sle_1vn_local_name), "%s-%02d",
-                  CONFIG_SLE_1VN_SERVER_NAME_PREFIX, CONFIG_SLE_1VN_SERVER_ID) < 0) {
-        osal_printk("%s build local_name fail\r\n", SLE_1VN_SERVER_LOG);
-        return NULL;
+    uint8_t soc_id[20] = {0};
+    errcode_t ret = uapi_soc_read_id(soc_id, sizeof(soc_id));
+    if (ret == ERRCODE_SUCC) {
+        if (sprintf_s(g_sle_1vn_local_name, sizeof(g_sle_1vn_local_name), "%s-%02x%02x%02x%02x",
+                      CONFIG_SLE_1VN_SERVER_NAME_PREFIX,
+                      soc_id[16], soc_id[17], soc_id[18], soc_id[19]) < 0) {
+            osal_printk("%s build local_name fail\r\n", SLE_1VN_SERVER_LOG);
+            return NULL;
+        }
+    } else {
+        if (sprintf_s(g_sle_1vn_local_name, sizeof(g_sle_1vn_local_name), "%s-%02d",
+                      CONFIG_SLE_1VN_SERVER_NAME_PREFIX, CONFIG_SLE_1VN_SERVER_ID) < 0) {
+            osal_printk("%s build local_name fail\r\n", SLE_1VN_SERVER_LOG);
+            return NULL;
+        }
     }
 
     return g_sle_1vn_local_name;
